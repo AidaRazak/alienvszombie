@@ -8,14 +8,13 @@ using namespace std;
 class AVZ
 {
 private:
-    vector<vector<char> > map_; // convention to put trailing underscore
+    vector<vector<char>> map_; // convention to put trailing underscore
     int numX_, numY_;          // to indicate private data
 public:
     AVZ(int numX = 15, int numY = 5);
     void init(int numX, int numY);
     void display() const;
 };
-// test
 
 AVZ::AVZ(int numX, int numY)
 {
