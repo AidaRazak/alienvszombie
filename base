@@ -15,6 +15,7 @@ public:
     void init(int numX, int numY);
     void display() const;
 };
+// test
 
 AVZ::AVZ(int numX, int numY)
 {
