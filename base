@@ -5,22 +5,22 @@
 #include <ctime>   // for time() in srand( time(NULL) );
 #include <iomanip> // for setw()
 using namespace std;
-class Mars
+class AVZ
 {
 private:
     vector<vector<char> > map_; // convention to put trailing underscore
     int numX_, numY_;          // to indicate private data
 public:
-    Mars(int numX = 15, int numY = 5);
+    AVZ(int numX = 15, int numY = 5);
     void init(int numX, int numY);
     void display() const;
 };
 
-Mars::Mars(int numX, int numY)
+AVZ::AVZ(int numX, int numY)
 {
     init(numX, numY);
 }
-void Mars::init(int numX, int numY)
+void AVZ::init(int numX, int numY)
 {
     numX_ = numX;
     numY_ = numY;
@@ -43,7 +43,7 @@ void Mars::init(int numX, int numY)
     }
 }
 
-void Mars::display() const
+void AVZ::display() const
 {
     // comment this out during testing
     // system("cls"); // OR system("clear"); for Linux / MacOS
@@ -103,8 +103,8 @@ void Mars::display() const
 
 void display()
 {
-    Mars mars;
-    mars.display();
+    AVZ AVZ;
+    AVZ.display();
 }
 int main()
 {
