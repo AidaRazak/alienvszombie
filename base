@@ -48,9 +48,7 @@ void AVZ::display() const
 {
     // comment this out during testing
     // system("cls"); // OR system("clear"); for Linux / MacOS
-    cout << "+===========================+" << endl;
-    cout << " .Alien vs Zombie ᕙ(`▿´)ᕗ." << endl;
-    cout << "+===========================+" << endl;
+    cout << "+.Alien vs Zombie ᕙ(`▿´)ᕗ.+" << endl;
     // for each row
     for (int i = 0; i < numY_; ++i)
     {
