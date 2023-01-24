@@ -1,3 +1,0 @@
-# alienvszombie
-programming assignment
-
