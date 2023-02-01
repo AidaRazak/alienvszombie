@@ -1,0 +1,396 @@
+// ********************************************************* 
+// Course: TCP1101 PROGRAMMING FUNDAMENTALS 
+// Year: Trimester 1, 2022/23 (T2215) 
+// Lab: TT5L 
+// Names: NUR FARAHIYA AIDA  | NUR ALIA AMELISA SYAZREEN | WAN ALIA ADLINA
+// IDs: 1211103194 | 1211103602 | 1211103227
+// Emails: 1211103194@student.mmu.edu.my | 1211103602@student.mmu.edu.my | 1211103227@student.mmu.edu.my
+// Phones: 011-51121620 | 014-2100540 | 019-9935060
+// ********************************************************* 
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdlib> // for system()
+#include <ctime>   // for time() in srand( time(NULL) );
+#include <iomanip> // for setw()
+#include <conio.h> //for press any key
+#include <stdlib.h>
+#include <fstream>
+#include <utility>
+using namespace std;
+
+class AVZ
+{
+private:
+    vector<vector<char>> map_; // convention to put trailing underscore
+    int numX_, numY_;
+    int currentX_, currentY_; // to indicate private data
+
+
+public:
+    AVZ(int rows = 5, int col = 15, int zombie = 2); // constructor with number of rows and columns
+    void initArray();                                // function to intialize the array
+    void displayArray() const;                       // function to display the array
+    void displaySettings() const;                    // to display default game settings
+    void insertRandomCharacter(char ch);
+    int getDimX() const;
+    int getDimY() const;
+    void setRows(int rows);
+    void setCol(int col);
+    void setZombie(int zombie);
+    void init(int numX, int numY);
+    void moveCharacter(int currentX_, int currentY_);
+    int rows_, col_;
+    int zombies;
+    char save, load, direction, arrow, help, quit;
+};
+
+AVZ::AVZ(int rows, int col, int zombie)
+{
+    rows_ = rows;
+    col_ = col;
+    zombies = zombie;
+    map_.resize(rows_);
+    for (int i = 0; i < rows_; i++)
+    {
+        map_[i].resize(col_);
+    }
+}
+
+void AVZ::initArray() // initialize array with some values
+{
+    char characters[] = {' ', ' ', ' ', ' ', ' ', 'r', '^', '>', '<', 'v', 'p', 'h', '1', '2'};
+    int noOfObjects = 14;
+
+    for (int i = 0; i < map_.size(); i++)
+    {
+        for (int j = 0; j < col_; j++)
+        {
+            map_[i][j] = characters[rand() % 5];
+        }
+    }
+
+    for (int i = 0; i < map_.size(); i++)
+    {
+        for (int j = 0; j < col_; j++)
+        {
+            int objNo = rand() % noOfObjects;
+            map_[i][j] = characters[objNo];
+        }
+    }
+    int centerRow = rows_ / 2;
+    int centerCol = col_ / 2;
+    map_[centerRow][centerCol] = 'A';
+}
+
+void AVZ::displayArray() const
+{
+    cout << " " << endl;
+    cout << "~~~~~ᕙ(`▿´)ᕗ~~~~~~" << endl;
+    cout << "+. Alien Vs Zombie .+" << endl;
+    cout << "~~~~~ᕙ(`▿´)ᕗ~~~~~~" << endl;
+    cout << " " << endl;
+    // for each row
+    for (int i = 0; i < map_.size(); ++i)
+    {
+        // display upper border of the row
+        cout << " ";
+        cout << " ";
+        for (int j = 0; j < col_; ++j)
+        {
+            cout << "+-";
+        }
+        cout << "+" << endl;
+        // display row number
+        cout << setfill(' ') << (rows_ - i) << " ";
+        // display cell content and border of each column
+        for (int j = 0; j < col_; ++j)
+        {
+            cout << "|" << map_[i][j];
+        }
+        cout << "|" << endl;
+    }
+    // display lower border of the last row
+    cout << " ";
+    cout << " ";
+    for (int j = 0; j < col_; ++j)
+    {
+        cout << "+-";
+    }
+    cout << "+" << endl;
+    // display column number
+    cout << " ";
+    cout << " ";
+    for (int j = 0; j < col_; ++j)
+    {
+        int digit = (j + 1) / 10;
+        cout << " ";
+        if (digit == 0)
+            cout << " ";
+        else
+            cout << digit;
+    }
+    cout << endl;
+    cout << " ";
+    cout << " ";
+    for (int j = 0; j < col_; ++j)
+    {
+        cout << " " << (j + 1) % 10;
+    }
+
+    cout << endl
+         << endl;
+}
+
+void AVZ::insertRandomCharacter(char ch)
+{
+    for (int i = 0; i < map_.size(); i++)
+    {
+        for (int j = 0; j < map_[i].size(); j++)
+        {
+            // if (rand() % 2 == 0)
+            //{
+            //  map_[i][j] = ch;
+            //}
+        }
+    }
+}
+
+void AVZ::displaySettings() const
+{
+    cout << "Board Rows   : " << rows_ << endl;
+    cout << "Board Columns: " << col_ << endl;
+    cout << "Zombie Count : " << zombies << endl;
+}
+
+void AVZ::setRows(int rows)
+{
+    rows_ = rows;
+}
+
+void AVZ::setCol(int col)
+{
+    col_ = col;
+}
+
+void AVZ::setZombie(int zombies)
+
+{
+    int zombiesPlaced = 0;
+    while (zombiesPlaced < zombies)
+    {
+        int x = rand() % rows_;
+        int y = rand() % col_;
+        if (map_[x][y] == ' ')
+        {
+            map_[x][y] = 'z';
+            zombiesPlaced++;
+        }
+    }
+}
+
+void AVZ::moveCharacter( int currentX_, int currentY_)
+{
+    int centerRow = rows_ / 2;
+    int centerCol = col_ / 2;
+    map_[centerRow][centerCol] = 'A';
+    string command;
+    int newX;
+    int newY;
+    // update the current row and column
+    vector<pair<int, int>> trail;
+    cout<< "Enter the direction ( left, right, up, down):";
+    cin >> command;
+    if (command == "left" || command == "Left") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    // update the position of the "A" character in the map array
+    map_[centerRow][centerCol] = ' '; // clear the current position
+    centerCol -= 1;
+    map_[centerRow][centerCol] = 'A'; // set the new position
+  } else if (command == "right" || command == "Right") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    // update the position of the "A" character in the map array
+    map_[centerRow][centerCol] = ' '; // clear the current position
+    centerCol += 1;
+    map_[centerRow][centerCol] = 'A'; // set the new position
+  } else if (command == "up" || command == "Up") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    map_[centerRow][centerCol] = ' ';
+    centerRow -= 1;
+    map_[centerRow][centerCol] = 'A';
+  } else if (command == "down" || command == "down") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    map_[centerRow][centerCol] = ' ';
+    centerRow += 1;
+    map_[centerRow][centerCol] = 'A';
+  }
+  // draw the trail
+  for (const auto &pos : trail) {
+    map_[pos.first][pos.second] = '.';
+  }
+  displayArray();
+}
+
+int main()
+{
+    AVZ game; // create object of AVZ class with default number of rows and columns
+
+    char characters[] = {' ', ' ', ' ', ' ', ' ', 'r', '^', '>', '<', 'v', 'p', 'h', '1', '2'};
+    game.initArray();
+    for (int i = 0; i < 14; i++)
+    {
+        game.insertRandomCharacter(characters[i]);
+    }
+    srand(time(NULL));
+    cout << "Assignment (Part 1)" << endl;
+    cout << "Let's Get Started!" << endl;
+    cout << "Default game setting:" << endl;
+    cout << "---------------------" << endl;
+    game.displaySettings();
+    cout << " " << endl;
+    {
+        cout << "Do you wish to change the game settings (y/n)?: ";
+        char choice;
+        cin >> choice;
+        int rows_, col_, zombies;
+        if (choice == 'y' || choice == 'Y')
+        {
+            cout << endl;
+            cout << "--------------------------" << endl;
+            cout << "Enter the number of rows: ";
+            cin >> rows_;
+            if (rows_ % 2 == 0)
+            {
+                cout << "Attention! Please insert odd number! " << endl;
+                cout << endl;
+                cout << "Enter the number of rows: ";
+                cin >> rows_;
+            }
+
+            cout << "Enter the number of columns: ";
+            cin >> col_;
+            if (col_ % 2 == 0)
+            {
+                cout << "Attention! Please insert odd number! " << endl;
+                cout << endl;
+                cout << "Enter the number of columns: ";
+                cin >> col_;
+            }
+
+            cout << "Enter number of zombies:";
+            cin >> zombies;
+            if (zombies > 9)
+            {
+                cout << "Too many zombies! max number of zombies is 9 " << endl;
+                cout << "Enter number of zombies:";
+                cin >> zombies;
+            }
+
+            cout << "Settings Updated. " << endl;
+            cout << "Press any key to continue... " << endl;
+            getch();
+            game.setRows(rows_);
+            game.setCol(col_);
+            game = AVZ(rows_, col_, zombies);
+            game.initArray();
+            game.setZombie(zombies);
+
+            for (int i = 0; i < 14; i++)
+            {
+                game.insertRandomCharacter(characters[i]);
+            }
+            game.displayArray();
+        }
+        else
+        {
+            cout << "Press any key to continue..." << endl;
+            getch();
+            game.initArray();
+            for (int i = 0; i < 14; i++)
+            {
+                game.insertRandomCharacter(characters[i]);
+            }
+            game.displayArray();
+        }
+    }
+
+    while (true)
+    {
+        cout << "Please Enter Command: ";
+        string command;
+        cin >> command;
+        char choice;
+        char save_, load_, direction_, arrow_, help_, quit_;
+        int rows_, col_, zombies;
+        int currentX_, currentY_;
+        if (command == "save" || command == "Save")
+        {
+            ofstream saveFile;
+            saveFile.open("savedGame.txt");
+            // write the current game state to the file
+            saveFile.close();
+            cout << "Game saved successfully." << endl;
+        }
+
+        if (command == "load" || command == "Load")
+        {
+            cout << " Do you want to save the current game? (y/n): ";
+            string fileName;
+            if (choice == 'n' or 'N')
+            {
+                cout << "Enter the file name to load: ";
+                cin >> fileName;
+                cout << "Game Loaded" << endl;
+            }
+        }
+        if (command == "help" || command == "Help")
+        {
+            cout << "help" << endl;
+            cout << "Commands" << endl;
+            cout << "1.  direction:(state any of the below) " << endl;
+            cout << "    up      - Move up." << endl;
+            cout << "    down    - Move down." << endl;
+            cout << "    left    - Move left." << endl;
+            cout << "    right   - Move right." << endl;
+            cout << "2.  arrow   - Change the direction of an arrow." << endl;
+            cout << "3.  help    - Display these user commands." << endl;
+            cout << "4.  save    - Save the game." << endl;
+            cout << "5.  load    - Load a game." << endl;
+            cout << "6.  quit    - Quit the game. " << endl;  
+           
+        }
+        if (command == "arrow" || command == "Arrow")
+        {
+            // cin << arrow_
+        }
+        if (command == "direction" || command == "Direction")
+        {
+            game.moveCharacter(currentX_, currentY_);
+        }
+        if (command == "quit" || command == "Quit")
+        {
+            cout << "Are you sure you want to quit the game? (y/n):";
+            char choice;
+            cin >> choice;
+            if (choice == 'y' || choice == 'Y')
+            {
+                cout << "Thank you for playing. See you again!" << endl;
+            }
+            else
+            {
+                 cout << "Please Enter Command: ";
+                 string command;
+                 cin >> command;
+            }
+            break; // exit or terminate program
+        }
+
+    }
+
+return 0;
+}
