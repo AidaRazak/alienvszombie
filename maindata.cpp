@@ -1,3 +1,13 @@
+// ********************************************************* 
+// Course: TCP1101 PROGRAMMING FUNDAMENTALS 
+// Year: Trimester 1, 2022/23 (T2215) 
+// Lab: TT5L 
+// Names: NUR FARAHIYA AIDA  | NUR ALIA AMELISA SYAZREEN | WAN ALIA ADLINA
+// IDs: 1211103194 | 1211103602 | 1211103227
+// Emails: 1211103194@student.mmu.edu.my | 1211103602@student.mmu.edu.my | 1211103227@student.mmu.edu.my
+// Phones: 011-51121620 | 014-2100540 | 019-9935060
+// ********************************************************* 
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,6 +17,7 @@
 #include <conio.h> //for press any key
 #include <stdlib.h>
 #include <fstream>
+#include <utility>
 using namespace std;
 
 class AVZ
@@ -15,6 +26,8 @@ private:
     vector<vector<char>> map_; // convention to put trailing underscore
     int numX_, numY_;
     int currentX_, currentY_; // to indicate private data
+
+
 public:
     AVZ(int rows = 5, int col = 15, int zombie = 2); // constructor with number of rows and columns
     void initArray();                                // function to intialize the array
@@ -27,7 +40,7 @@ public:
     void setCol(int col);
     void setZombie(int zombie);
     void init(int numX, int numY);
-    void moveCharacter();
+    void moveCharacter(int currentX_, int currentY_);
     int rows_, col_;
     int zombies;
     char save, load, direction, arrow, help, quit;
@@ -74,9 +87,9 @@ void AVZ::initArray() // initialize array with some values
 void AVZ::displayArray() const
 {
     cout << " " << endl;
-    cout << "~~~~~~~~~~~~~~~ᕙ(`▿´)ᕗ~~~~~~~~~~~~~~~~" << endl;
-    cout << "         +. Alien Vs Zombie .+         " << endl;
-    cout << "~~~~~~~~~~~~~~~ᕙ(`▿´)ᕗ~~~~~~~~~~~~~~~~" << endl;
+    cout << "~~~~~ᕙ(`▿´)ᕗ~~~~~~" << endl;
+    cout << "+. Alien Vs Zombie .+" << endl;
+    cout << "~~~~~ᕙ(`▿´)ᕗ~~~~~~" << endl;
     cout << " " << endl;
     // for each row
     for (int i = 0; i < map_.size(); ++i)
@@ -162,6 +175,7 @@ void AVZ::setCol(int col)
 }
 
 void AVZ::setZombie(int zombies)
+
 {
     int zombiesPlaced = 0;
     while (zombiesPlaced < zombies)
@@ -174,6 +188,52 @@ void AVZ::setZombie(int zombies)
             zombiesPlaced++;
         }
     }
+}
+
+void AVZ::moveCharacter( int currentX_, int currentY_)
+{
+    int centerRow = rows_ / 2;
+    int centerCol = col_ / 2;
+    map_[centerRow][centerCol] = 'A';
+    string command;
+    int newX;
+    int newY;
+    // update the current row and column
+    vector<pair<int, int>> trail;
+    cout<< "Enter the direction ( left, right, up, down):";
+    cin >> command;
+    if (command == "left" || command == "Left") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    // update the position of the "A" character in the map array
+    map_[centerRow][centerCol] = ' '; // clear the current position
+    centerCol -= 1;
+    map_[centerRow][centerCol] = 'A'; // set the new position
+  } else if (command == "right" || command == "Right") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    // update the position of the "A" character in the map array
+    map_[centerRow][centerCol] = ' '; // clear the current position
+    centerCol += 1;
+    map_[centerRow][centerCol] = 'A'; // set the new position
+  } else if (command == "up" || command == "Up") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    map_[centerRow][centerCol] = ' ';
+    centerRow -= 1;
+    map_[centerRow][centerCol] = 'A';
+  } else if (command == "down" || command == "down") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    map_[centerRow][centerCol] = ' ';
+    centerRow += 1;
+    map_[centerRow][centerCol] = 'A';
+  }
+  // draw the trail
+  for (const auto &pos : trail) {
+    map_[pos.first][pos.second] = '.';
+  }
+  displayArray();
 }
 
 int main()
@@ -231,6 +291,7 @@ int main()
                 cin >> zombies;
             }
 
+            cout << "Settings Updated. " << endl;
             cout << "Press any key to continue... " << endl;
             getch();
             game.setRows(rows_);
@@ -263,7 +324,10 @@ int main()
         cout << "Please Enter Command: ";
         string command;
         cin >> command;
+        char choice;
         char save_, load_, direction_, arrow_, help_, quit_;
+        int rows_, col_, zombies;
+        int currentX_, currentY_;
         if (command == "save" || command == "Save")
         {
             ofstream saveFile;
@@ -272,45 +336,61 @@ int main()
             saveFile.close();
             cout << "Game saved successfully." << endl;
         }
+
+        if (command == "load" || command == "Load")
+        {
+            cout << " Do you want to save the current game? (y/n): ";
+            string fileName;
+            if (choice == 'n' or 'N')
+            {
+                cout << "Enter the file name to load: ";
+                cin >> fileName;
+                cout << "Game Loaded" << endl;
+            }
+        }
+        if (command == "help" || command == "Help")
+        {
+            cout << "help" << endl;
+            cout << "Commands" << endl;
+            cout << "1.  direction:(state any of the below) " << endl;
+            cout << "    up      - Move up." << endl;
+            cout << "    down    - Move down." << endl;
+            cout << "    left    - Move left." << endl;
+            cout << "    right   - Move right." << endl;
+            cout << "2.  arrow   - Change the direction of an arrow." << endl;
+            cout << "3.  help    - Display these user commands." << endl;
+            cout << "4.  save    - Save the game." << endl;
+            cout << "5.  load    - Load a game." << endl;
+            cout << "6.  quit    - Quit the game. " << endl;  
+           
+        }
+        if (command == "arrow" || command == "Arrow")
+        {
+            // cin << arrow_
+        }
+        if (command == "direction" || command == "Direction")
+        {
+            game.moveCharacter(currentX_, currentY_);
+        }
         if (command == "quit" || command == "Quit")
         {
             cout << "Are you sure you want to quit the game? (y/n):";
             char choice;
             cin >> choice;
-            if (choice == 'y' or 'Y')
+            if (choice == 'y' || choice == 'Y')
             {
                 cout << "Thank you for playing. See you again!" << endl;
             }
-            system("cls"); // exit or terminate program
-
-            if (command == "load" || command == "Load")
-            {
-                // cin << load_
-            }
-            if (command == "arrow" || command == "Arrow")
-            {
-                // cin << arrow_
-            }
-            if (command == "direction" || command == "Direction")
-            {
-                // cin << direction_
-            }
-            if (command == "help" || command == "Help")
-            {
-                // cin << help_
-            }
             else
             {
-                cout << "Press any key to continue..." << endl;
-                getch();
-                game.initArray();
-                for (int i = 0; i < 14; i++)
-                {
-                    game.insertRandomCharacter(characters[i]);
-                }
-                game.displayArray();
+                 cout << "Please Enter Command: ";
+                 string command;
+                 cin >> command;
             }
+            break; // exit or terminate program
         }
+
     }
-    return 0;
+
+return 0;
 }
