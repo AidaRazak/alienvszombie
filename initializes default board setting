@@ -1,0 +1,55 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <cstdlib> // for system()
+#include <ctime>   // for time() in srand( time(NULL) );
+#include <iomanip> // for setw()
+#include <conio.h> //for press any key
+#include <stdlib.h>
+#include <fstream>
+#include <utility>
+using namespace std;
+
+class AVZ
+{
+private:
+    vector<vector<char>> map_; // convention to put trailing underscore
+    int numX_, numY_;
+    int currentX_, currentY_; // to indicate private data
+
+
+public:
+    AVZ(int rows = 5, int col = 15, int zombie = 2); // constructor with number of rows and columns
+    void initArray();                                // function to intialize the array
+    void displayArray() const;                       // function to display the array
+    void displaySettings() const;                    // to display default game settings
+    void insertRandomCharacter(char ch);
+    int getDimX() const;
+    int getDimY() const;
+    void setRows(int rows);
+    void setCol(int col);
+    void setZombie(int zombie);
+    void init(int numX, int numY);
+    void moveCharacter(int currentX_, int currentY_);
+    int rows_, col_;
+    int zombies;
+    char save, load, direction, arrow, help, quit;
+};
+
+AVZ::AVZ(int rows, int col, int zombie)
+{
+    rows_ = rows;
+    col_ = col;
+    zombies = zombie;
+    map_.resize(rows_);
+    for (int i = 0; i < rows_; i++)
+    {
+        map_[i].resize(col_);
+    }
+}
+void AVZ::displaySettings() const
+{
+    cout << "Board Rows   : " << rows_ << endl;
+    cout << "Board Columns: " << col_ << endl;
+    cout << "Zombie Count : " << zombies << endl;
+}
