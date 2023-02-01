@@ -1,0 +1,5 @@
+ // draw the trail
+  for (const auto &pos : trail) {
+    map_[pos.first][pos.second] = '.';
+  }
+  displayArray();
