@@ -1,0 +1,40 @@
+//for command==save
+        {
+            ofstream saveFile;
+            saveFile.open("savedGame.txt");
+            // write the current game state to the file
+            saveFile.close();
+            cout << "Game saved successfully." << endl;
+        }
+        
+ // for command == load
+ 
+ if (command == "load" || command == "Load")
+        {
+            cout << " Do you want to save the current game? (y/n): ";
+            string fileName;
+            if (choice == 'n' or 'N')
+            {
+                cout << "Enter the file name to load: ";
+                cin >> fileName;
+                cout << "Game Loaded" << endl;
+            }
+        }
+        
+// for command == help
+if (command == "help" || command == "Help")
+        {
+            cout << "help" << endl;
+            cout << "Commands" << endl;
+            cout << "1.  direction:(state any of the below) " << endl;
+            cout << "    up      - Move up." << endl;
+            cout << "    down    - Move down." << endl;
+            cout << "    left    - Move left." << endl;
+            cout << "    right   - Move right." << endl;
+            cout << "2.  arrow   - Change the direction of an arrow." << endl;
+            cout << "3.  help    - Display these user commands." << endl;
+            cout << "4.  save    - Save the game." << endl;
+            cout << "5.  load    - Load a game." << endl;
+            cout << "6.  quit    - Quit the game. " << endl;  
+           
+        }
