@@ -37,9 +37,4 @@ void AVZ::moveCharacter( int currentX_, int currentY_)
     centerRow += 1;
     map_[centerRow][centerCol] = 'A';
   }
-  // draw the trail
-  for (const auto &pos : trail) {
-    map_[pos.first][pos.second] = '.';
-  }
-  displayArray();
 }
