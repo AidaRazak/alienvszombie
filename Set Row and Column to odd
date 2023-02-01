@@ -1,0 +1,43 @@
+// After print main header
+cout << " " << endl;
+    {
+        cout << "Do you wish to change the game settings (y/n)?: ";
+        char choice;
+        cin >> choice;
+        int rows_, col_, zombies;
+        if (choice == 'y' || choice == 'Y')
+        {
+            cout << endl;
+            cout << "--------------------------" << endl;
+            cout << "Enter the number of rows: ";
+            cin >> rows_;
+            if (rows_ % 2 == 0)
+            {
+                cout << "Attention! Please insert odd number! " << endl;
+                cout << endl;
+                cout << "Enter the number of rows: ";
+                cin >> rows_;
+            }
+
+            cout << "Enter the number of columns: ";
+            cin >> col_;
+            if (col_ % 2 == 0)
+            {
+                cout << "Attention! Please insert odd number! " << endl;
+                cout << endl;
+                cout << "Enter the number of columns: ";
+                cin >> col_;
+            }
+
+            cout << "Enter number of zombies:";
+            cin >> zombies;
+            if (zombies > 9)
+            {
+                cout << "Too many zombies! max number of zombies is 9 " << endl;
+                cout << "Enter number of zombies:";
+                cin >> zombies;
+            }
+
+            cout << "Settings Updated. " << endl;
+            cout << "Press any key to continue... " << endl;
+            getch();
