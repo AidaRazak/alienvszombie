@@ -1,0 +1,4 @@
+//after random characters in board 
+int centerRow = rows_ / 2;
+    int centerCol = col_ / 2;
+    map_[centerRow][centerCol] = 'A';
