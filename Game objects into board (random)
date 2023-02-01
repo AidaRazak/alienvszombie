@@ -1,0 +1,22 @@
+void AVZ::initArray() // initialize array with some values
+{
+    char characters[] = {' ', ' ', ' ', ' ', ' ', 'r', '^', '>', '<', 'v', 'p', 'h', '1', '2'};
+    int noOfObjects = 14;
+
+    for (int i = 0; i < map_.size(); i++)
+    {
+        for (int j = 0; j < col_; j++)
+        {
+            map_[i][j] = characters[rand() % 5];
+        }
+    }
+
+    for (int i = 0; i < map_.size(); i++)
+    {
+        for (int j = 0; j < col_; j++)
+        {
+            int objNo = rand() % noOfObjects;
+            map_[i][j] = characters[objNo];
+        }
+    }
+}
