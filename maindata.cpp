@@ -175,7 +175,6 @@ void AVZ::setCol(int col)
 }
 
 void AVZ::setZombie(int zombies)
-
 {
     int zombiesPlaced = 0;
     while (zombiesPlaced < zombies)
@@ -184,7 +183,7 @@ void AVZ::setZombie(int zombies)
         int y = rand() % col_;
         if (map_[x][y] == ' ')
         {
-            map_[x][y] = 'z';
+            map_[x][y] = '0' + (zombiesPlaced + 1) % 10;
             zombiesPlaced++;
         }
     }
