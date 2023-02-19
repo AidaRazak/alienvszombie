@@ -1,0 +1,45 @@
+void AVZ::moveCharacter( int currentX_, int currentY_)
+{
+    int centerRow = rows_ / 2;
+    int centerCol = col_ / 2;
+    map_[centerRow][centerCol] = 'A';
+    string command;
+    int newX;
+    int newY;
+    // update the current row and column
+    vector<pair<int, int>> trail;
+    cout<< "Enter the direction ( left, right, up, down):";
+    cin >> command;
+    if (command == "left" || command == "Left") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    // update the position of the "A" character in the map array
+    map_[centerRow][centerCol] = ' '; // clear the current position
+    centerCol -= 1;
+    map_[centerRow][centerCol] = 'A'; // set the new position
+  } else if (command == "right" || command == "Right") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    // update the position of the "A" character in the map array
+    map_[centerRow][centerCol] = ' '; // clear the current position
+    centerCol += 1;
+    map_[centerRow][centerCol] = 'A'; // set the new position
+  } else if (command == "up" || command == "Up") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    map_[centerRow][centerCol] = ' ';
+    centerRow -= 1;
+    map_[centerRow][centerCol] = 'A';
+  } else if (command == "down" || command == "down") {
+    // store the previous position
+    trail.emplace_back(centerRow, centerCol);
+    map_[centerRow][centerCol] = ' ';
+    centerRow += 1;
+    map_[centerRow][centerCol] = 'A';
+  }
+  // draw the trail
+  for (const auto &pos : trail) {
+    map_[pos.first][pos.second] = '.';
+  }
+  displayArray();
+}
