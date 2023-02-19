@@ -1,0 +1,195 @@
+class Zombie
+{
+public:
+    int life;
+    int attack;
+    int range;
+
+    Zombie(int boardSize)
+    {
+        srand(time(nullptr));                 // seed the random number generator
+        life = rand() % 101 + 200;            // life between 200 and 300
+        attack = rand() % (life + 1);         // attack between 0 and life
+        range = rand() % (boardSize / 2) + 1; // range between 1 and half of boardSize
+    }
+};
+AVZ::AVZ(int rows, int col, int zombie)
+{
+    rows_ = rows;
+    col_ = col;
+    zombies = zombie;
+    map_.resize(rows_);
+    for (int i = 0; i < rows_; i++)
+    {
+        map_[i].resize(col_);
+    }
+}
+
+void AVZ::initArray() // initialize array with some values
+{
+    char characters[] = {' ', ' ', ' ', ' ', ' ', 'r', '^', '>', '<', 'v', 'p', 'h'};
+    int noOfObjects = 12;
+
+    for (int i = 0; i < map_.size(); i++)
+    {
+        for (int j = 0; j < col_; j++)
+        {
+            map_[i][j] = characters[rand() % 5];
+        }
+    }
+
+    for (int i = 0; i < map_.size(); i++)
+    {
+        for (int j = 0; j < col_; j++)
+        {
+            int objNo = rand() % noOfObjects;
+            map_[i][j] = characters[objNo];
+        }
+    }
+    int centerRow = rows_ / 2;
+    int centerCol = col_ / 2;
+    map_[centerRow][centerCol] = 'A';
+}
+
+void AVZ::displayAlienStatus(int &A_health, int A_attack_damage, int A_attack_range)
+{
+
+    cout << "Alien Status  >>>";
+    cout << " ";
+    cout << "Health: " << A_health;
+
+    cout << " ";
+    cout << "| Attack Damage: " << A_attack_damage;
+    cout << " ";
+    cout << "| Attack Range: " << A_attack_range << endl;
+}
+
+void AVZ::displayZombieStatus(int numZombies, int Z_health, int Z_attack_damage, int Z_attack_range)
+{
+
+    for (int i = 0; i < numZombies; i++)
+    {
+        cout << "Zombie Status"
+             << " " << i + 1 << ">>>";
+        cout << " ";
+        cout << "Health: " << Z_health;
+        cout << " ";
+        cout << "| Attack Damage: " << Z_attack_damage;
+        cout << " ";
+        cout << "| Attack Range: " << Z_attack_range << endl;
+    }
+}
+
+void AVZ::fightZombies(int zombies) {
+    // Generate the alien's life value
+    srand(time(NULL)); // seed the random number generator
+    int alienLife = rand() % 101 + 100; // life between 100 and 200
+    int alienAttack = 0; // Setting the alien's attack value to zero
+
+    // Loop over the zombies
+    for (int i = 1; i <= zombies; i++)
+    {
+        // Generate the zombie's life, attack, and range values
+        int zombieLife = rand() % 101 + 100; // generate random life value between 100 and 200
+        int zombieAttack = rand() % 11 + 90; // generate random attack value between 90 and 100
+        int zombieRange = rand() % 5 + 1;
+
+        // Output the zombie's information
+        cout << "Zombie " << i << "    Life:  " << zombieLife << "    Attack:  " << zombieAttack << " Range:     " << zombieRange << endl;
+    }
+
+    // Output the alien's information
+    cout << "Alien       Life: " << alienLife << "   Attack:" << alienAttack << endl;
+}
+
+void AVZ::resetGrid(vector<vector<char>> &grid, int &currentX, int &currentY)
+{
+    for (int i = 0; i < grid.size(); i++)
+    {
+        for (int j = 0; j < grid[i].size(); j++)
+        {
+            if (grid[i][j] == '.' && (i != currentX || j != currentY))
+            {
+                grid[i][j] = ' ';
+
+                // Generate new game object (except in the Alien trail)
+                srand(time(NULL)); // Initialize the random seed
+
+                int objNo;
+                do
+                {
+                    objNo = rand() % 4; // Generate a random game object index
+                } while (objNo == 2);   // Check if the game object is not ' '
+
+                char objects[] = {'p', 'h', 'r', ' ', ' ', ' '}; // Define the game objects
+                grid[i][j] = objects[objNo];
+            }
+        }
+    }
+}
+
+void AVZ::displayArray() const
+{
+    cout << " " << endl;
+    cout << "~~~~~ᕙ(`▿´)ᕗ~~~~~~" << endl;
+    cout << "+. Alien Vs Zombie .+" << endl;
+    cout << "~~~~~ᕙ(`▿´)ᕗ~~~~~~" << endl;
+    cout << " " << endl;
+    // for each row
+    for (int i = 0; i < map_.size(); ++i)
+    {
+        // display upper border of the row
+        cout << " ";
+        cout << " ";
+        for (int j = 0; j < col_; ++j)
+        {
+            cout << "+-";
+        }
+        cout << "+" << endl;
+        // display row number
+        cout << setfill(' ') << (rows_ - i) << " ";
+        // display cell content and border of each column
+        for (int j = 0; j < col_; ++j)
+        {
+            cout << "|" << map_[i][j];
+        }
+        cout << "|" << endl;
+    }
+    // display lower border of the last row
+    cout << " ";
+    cout << " ";
+    for (int j = 0; j < col_; ++j)
+    {
+        cout << "+-";
+    }
+    cout << "+" << endl;
+    // display column number
+    cout << " ";
+    cout << " ";
+    for (int j = 0; j < col_; ++j)
+    {
+        int digit = (j + 1) / 10;
+        cout << " ";
+        if (digit == 0)
+            cout << " ";
+        else
+            cout << digit;
+    }
+    cout << endl;
+    cout << " ";
+    cout << " ";
+    for (int j = 0; j < col_; ++j)
+    {
+        cout << " " << (j + 1) % 10;
+    }
+
+    cout << endl
+         << endl;
+}
+
+void AVZ::insertRandomCharacter(char ch)
+{
+ 
+ for (int i = 0; i < 1; i++){
+        game.fightZombies(zombies);
+    }
