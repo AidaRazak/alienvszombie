@@ -1,0 +1,34 @@
+class AVZ
+{
+private:
+    vector<vector<char>> map_; // convention to put trailing underscore
+    int numX_, numY_;
+    int currentX_, currentY_; // to indicate private data
+    int dimX, dimY;
+    int zombieLife;
+    int zombieAttack;
+    int zombieRange;
+
+public:
+    AVZ(int rows = 5, int col = 5, int zombie = 2); // constructor with number of rows and columns
+    void initArray();                               // function to intialize the array
+    void displayArray() const;                      // function to display the array
+    void displaySettings() const;                   // to display default game settings
+    void insertRandomCharacter(char ch);
+    int getDimX() const;
+    int getDimY() const;
+    void setRows(int rows);
+    void setCol(int col);
+    void setZombie(int zombie);
+    void fightZombies(int zombies);
+    void init(int numX, int numY);
+    void moveCharacter(int currentX_, int currentY_);
+    void displayAlienStatus(int &A_health, int A_attack_damage, int A_attack_range);
+    void displayZombieStatus(int numZombies, int Z_health, int Z_attack_damage, int Z_attack_range);
+    void resetGrid(vector<vector<char>> &grid, int &currentX, int &currentY);
+    void save_game(int dimY, int dimX, const int alienLife, const int alienAttack, const int zombieLife, const int zombieAttack, const int zombieRange, const int numOfZombie, const string &saveFileName);
+
+    int rows_, col_;
+    int zombies;
+    char save, load, direction, arrow, help, quit;
+};
