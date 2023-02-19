@@ -1,0 +1,15 @@
+class Zombie
+{
+public:
+    int life;
+    int attack;
+    int range;
+
+    Zombie(int boardSize)
+    {
+        srand(time(nullptr));                 // seed the random number generator
+        life = rand() % 101 + 200;            // life between 200 and 300
+        attack = rand() % (life + 1);         // attack between 0 and life
+        range = rand() % (boardSize / 2) + 1; // range between 1 and half of boardSize
+    }
+};
