@@ -1,0 +1,76 @@
+//add in class AVZ public
+void save_game(const vector<vector<char>> &map_, int dimY, int dimX, const int alienLife, const int alienAttack, const int zombieLife, const int zombieAttack, const int zombieRange, const int numOfZombie, const string &saveFileName);
+
+//add as new void 
+void AVZ::save_game(const vector<vector<char>>& map_, int dimY, int dimX, const int alienLife, const int alienAttack, const int zombieLife, const int zombieAttack, const int zombieRange, int numZombies, const string& saveFileName) 
+{
+    string fileName;
+    cout << "Type in filename:" << endl;
+    cin >> fileName;
+
+    ofstream file(fileName + ".txt");
+
+    file << endl;
+    file << "~~ᕙ(`▿´)ᕗ~~~" << endl;
+    file << "+. Alien Vs Zombie .+" << endl;
+    file << "~~ᕙ(`▿´)ᕗ~~~" << endl;
+    file << endl;
+
+    // for each row
+    for (int i = 0; i < dimY; ++i) {
+        // display upper border of the row
+        file << " ";
+        for (int j = 0; j < dimX; ++j) {
+            file << "+-";
+        }
+        file << "+" << endl;
+
+        // display row number
+        file << setw(1) << (dimY - i);
+
+        // display cell content and border of each column
+        for (int j = 0; j < dimX; ++j) {
+            file << "|" << map_[i][j];
+        }
+        file << "|" << endl;
+    }
+
+    // display lower border of the last row
+    file << " ";
+    for (int j = 0; j < dimX; ++j) {
+        file << "+-";
+    }
+    file << "+" << endl;
+
+    // display column number
+    file << " ";
+    for (int j = 0; j < dimX; ++j) {
+        int digit = (j + 1) / 10;
+        file << " ";
+        if (digit == 0)
+            file << " ";
+        else
+            file << digit;
+    }
+    file << endl;
+    file << " ";
+    for (int j = 0; j < dimX; ++j) 
+    {
+        file << " " << (j + 1) % 10;
+    }
+    file << endl << endl;
+
+    file << "Alien   : Life " << alienLife << ", Attack " << alienAttack << endl;
+
+    for (int i = 0; i < numZombies; i++) 
+    {
+        file << "Zombie " << i + 1 << ": ";
+        file << "Life " << zombieLife << ", Attack " << zombieAttack << ", Range " << zombieRange << endl;
+    }
+
+    file.close();
+    cout << "Game Saved" << endl;
+}
+
+//put under command==save
+save_game(map_, dimY, dimX, alienLife, alienAttack, zombies, zombieLife, zombieAttack, zombieRange,numZombies, saveFileName);
