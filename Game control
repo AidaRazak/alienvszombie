@@ -1,0 +1,17 @@
+if (command == "arrow" || command == "Arrow")
+        {
+            int rows_, col_;
+            vector<vector<char>> grid;
+            cout << "Enter the row and column of the symbol you want to change: " << endl;
+            char direction;
+            cout << "Row=> ";
+            cin >> rows_;
+            cout << "column=> ";
+            cin >> col_;
+            rows_--;
+            col_--;
+            cout << "Enter the direction you want to change the symbol to (e.g. '<', '^', '>', 'v'): ";
+            cin >> direction;
+            game.displayArray();
+            game.fightZombies(zombies);
+        }
