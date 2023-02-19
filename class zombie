@@ -1,0 +1,36 @@
+class Zombie
+{
+public:
+    int life;
+    int attack;
+    int range;
+void AVZ::fightZombies(int zombies)
+{
+    // Generate the alien's life value
+    srand(time(NULL));                  // seed the random number generator
+    int alienLife = rand() % 101 + 100; // life between 100 and 200
+    int alienAttack = 0;                // Setting the alien's attack value to zero
+
+    // Loop over the zombies
+    for (int i = 1; i <= zombies; i++)
+    {
+        // Generate the zombie's life, attack, and range values
+        int zombieLife = rand() % 101 + 100; // generate random life value between 100 and 200
+        int zombieAttack = rand() % 11 + 90; // generate random attack value between 90 and 100
+        int zombieRange = rand() % 5 + 1;
+
+        // Output the zombie's information
+        cout << "Zombie " << i << "    Life:  " << zombieLife << "    Attack:  " << zombieAttack << " Range:     " << zombieRange << endl;
+    }
+
+    // Output the alien's information
+    cout << "Alien       Life: " << alienLife << "   Attack:" << alienAttack << endl;
+}
+    Zombie(int boardSize)
+    {
+        srand(time(nullptr));                 // seed the random number generator
+        life = rand() % 101 + 200;            // life between 200 and 300
+        attack = rand() % (life + 1);         // attack between 0 and life
+        range = rand() % (boardSize / 2) + 1; // range between 1 and half of boardSize
+    }
+};
