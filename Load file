@@ -1,0 +1,107 @@
+//put in public AVZ
+void load_game(string fileName);
+
+//put as new void
+void AVZ::load_game(string fileName) 
+{
+    // Check if the file name ends with ".txt"
+    if (fileName.size() < 4 || fileName.substr(fileName.size() - 4) != ".txt") 
+    {
+        fileName += ".txt";
+    }
+
+    ifstream file(fileName);
+    if (!file) 
+    {
+        cout << "Could not open file: " << fileName << endl;
+        return;
+    }
+
+    string line;
+    int row = 0, col = 0;
+    vector<vector<char>> newMap;
+    int newDimY = 0, newDimX = 0;
+    int newAlienLife = 0, newAlienAttack = 0;
+    int newZombieLife = 0, newZombieAttack = 0, newZombieRange = 0;
+    int newNumOfZombie = 0;
+
+    while (getline(file, line)) 
+    {
+        if (line.empty()) 
+        {
+            continue;
+        }
+
+        if (row == 0) 
+        {
+            row++;
+            continue;
+        }
+
+        if (row == 1) 
+        {
+            istringstream iss(line);
+            iss.ignore(2);
+            iss >> newDimY >> newDimX;
+            newMap = vector<vector<char>>(newDimY, vector<char>(newDimX, ' '));
+            row++;
+            continue;
+        }
+
+        if (row >= 2 && row <= newDimY + 1) 
+        {
+            for (col = 0; col < newDimX; col++) {
+                newMap[row - 2][col] = line[col * 2 + 1];
+            }
+            row++;
+            continue;
+        }
+
+        istringstream iss(line);
+        string label;
+        iss >> label;
+
+        if (label == "Alien") 
+        {
+            iss.ignore(3); // ignore " : Life "
+            iss >> newAlienLife;
+            iss.ignore(9); // ignore ", Attack "
+            iss >> newAlienAttack;
+        } 
+        else if (label == "Zombie") 
+        {
+            int zombieIndex;
+            iss >> zombieIndex;
+            iss.ignore(2); // ignore ": "
+            iss.ignore(5); // ignore "Life "
+            iss >> newZombieLife;
+            iss.ignore(9); // ignore ", Attack "
+            iss >> newZombieAttack;
+            iss.ignore(8); // ignore ", Range "
+            iss >> newZombieRange;
+            newNumOfZombie++;
+        } 
+        else 
+        {
+            continue;
+        }
+    }
+
+    map_ = newMap;
+    dimY = newDimY;
+    dimX = newDimX;
+    alienLife = newAlienLife;
+    alienAttack = newAlienAttack;
+    zombieLife = newZombieLife;
+    zombieAttack = newZombieAttack;
+    zombieRange = newZombieRange;
+    numZombies = newNumZombies;
+
+    display();
+
+    file.close();
+    cout << "Game Loaded" << endl;
+}
+
+//put under command == load
+load_game(fileName);
